@@ -174,9 +174,31 @@
   .section-title.couple-title-stack .name-line{display:block}
   .section-title.couple-title-stack .amp{display:block;font-family:'Playfair Display',serif;font-style:italic;color:var(--rose);font-size:clamp(22px,5vw,32px);margin:6px 0}
 
-  .family{margin-top:40px;color:var(--ink-soft);font-style:italic;font-size:15px;line-height:1.8;max-width:440px;margin-left:auto;margin-right:auto;position:relative}
-  .family strong{font-family:'Cinzel',serif;font-style:normal;letter-spacing:.3em;font-size:10px;color:var(--rose-deep);display:block;margin-bottom:6px;font-weight:500}
-  .family-row{margin-bottom:24px}
+  .family{margin-top:40px;max-width:980px;margin:0 auto;padding-top:10px;position:relative}
+  .family-grid{display:grid;grid-template-columns:1fr;gap:22px;position:relative}
+  .family-card{background:rgba(255,255,255,.04);border:1px solid rgba(228,220,197,.16);border-radius:18px;padding:38px 30px;min-height:320px;position:relative;overflow:hidden;transition:transform .35s ease,box-shadow .35s ease,background .35s ease}
+  .family-card:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(0,0,0,.25);background:rgba(255,255,255,.08)}
+  .family-card::after{content:'';position:absolute;inset:0;border-radius:18px;border:1px solid rgba(228,220,197,.08);pointer-events:none}
+  .family-card strong{display:block;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--sand);margin-bottom:20px}
+  .family-card .name{font-family:'Lora',serif;font-size:clamp(32px,6vw,44px);font-weight:700;color:#fff;line-height:1.05;margin-bottom:18px}
+  .family-card em{display:block;font-family:'Italiana',serif;font-style:italic;color:rgba(255,255,255,.78);font-size:16px;margin-bottom:22px}
+  .family-card p{font-family:'Cormorant Garamond',serif;color:rgba(255,255,255,.72);font-size:15px;line-height:1.8;margin:0}
+  .family-connector{display:none}
+
+  .couple{background:#0f0b08;position:relative;overflow:hidden;padding:90px 24px 70px;text-align:center}
+  .couple::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 38%);pointer-events:none}
+  .couple::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.22));pointer-events:none}
+  .couple .section-eyebrow{color:var(--sand);letter-spacing:.5em;font-size:11px;margin-bottom:18px}
+  .couple .section-title{color:#fff;margin-bottom:40px}
+  .family-card:first-child{animation:fadeInUp .5s ease forwards .2s}
+  .family-card:last-child{animation:fadeInUp .5s ease forwards .35s}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+  @media (min-width:840px){
+    .family-grid{grid-template-columns:repeat(2, minmax(0, 1fr));gap:32px}
+    .family-connector{display:flex;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;background:rgba(228,220,197,.06);border:1px solid rgba(228,220,197,.18);align-items:center;justify-content:center;z-index:1;pointer-events:none}
+    .family-connector::before{content:'✦';color:var(--sand);font-size:18px;letter-spacing:.35em}
+  }
 
   .details{background:rgba(255,255,255,.94);color:var(--ink);padding:80px 24px 70px;position:relative}
   .details-lede{text-align:center;color:var(--ink-soft);font-size:17px;max-width:36ch;margin:0 auto 40px;line-height:1.7;font-style:italic}
@@ -246,6 +268,9 @@
 <div class="petals"><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div></div>
 
 <button id="mute-btn" onclick="toggleMute()" title="Toggle music">🎵</button>
+<audio id="bgm" hidden loop preload="auto">
+  <source src="assets/bg.mp3" type="audio/mpeg">
+</audio>
 <div id="mono-badge" class="mono-letters" aria-hidden="true"><span>S</span><span>R</span></div>
 
 <div id="landing">
@@ -302,8 +327,21 @@
       <span class="name-line">Ruvaidha</span>
     </h2>
     <div class="family">
-      <div class="family-row"><strong>GROOM</strong>Muhammed Shamil<br/><em>S/o Shihabudheen &amp; Sufaira Shamla</em><br/>Cholakkal House, Thirurkkad, Perintalmanna</div>
-      <div class="family-row"><strong>BRIDE</strong>Ruvaida<br/><em>D/o Noushad &amp; Kadeeja</em><br/>Eringalthodi House, Puthanangadi, Perintalmanna</div>
+      <div class="family-grid">
+        <div class="family-card">
+          <strong>GROOM</strong>
+          <div class="name">Muhammed Shamil</div>
+          <em>Son of Shihabudheen &amp; Sufaira Shamla</em>
+          <p>Cholakkal House, Thirurkkad, Perintalmanna</p>
+        </div>
+        <div class="family-card">
+          <strong>BRIDE</strong>
+          <div class="name">Ruvaida</div>
+          <em>Daughter of Noushad &amp; Kadeeja</em>
+          <p>Eringalthodi House, Puthanangadi, Perintalmanna</p>
+        </div>
+        <div class="family-connector" aria-hidden="true"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -426,8 +464,12 @@
     document.getElementById('main').classList.add('show');
     document.querySelector('.invite')?.classList.add('first-tile');
     document.body.style.overflow='auto';
-    const bgm=document.getElementById('bgm');
-    if(bgm){bgm.volume=0.7;bgm.play().catch(()=>{});}
+    const bgm = document.getElementById('bgm');
+    if(bgm){
+      bgm.volume = 0.7;
+      bgm.muted = false;
+      bgm.play().catch(()=>{});
+    }
     const mb=document.getElementById('mute-btn');
     if(mb) mb.classList.add('visible');
     startCountdown();
@@ -441,8 +483,8 @@
     const bgm=document.getElementById('bgm');
     const mb=document.getElementById('mute-btn');
     if(!bgm) return;
-    bgm.muted=!bgm.muted;
-    mb.textContent=bgm.muted?'🔇':'🎵';
+    bgm.muted = !bgm.muted;
+    mb.textContent = bgm.muted ? '🔇' : '🎵';
   }
 
   function escapeIcsText(s){
